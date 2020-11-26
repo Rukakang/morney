@@ -1,29 +1,6 @@
 <template>
   <div>
-    <Layout>
-      <div class="tags">
-        <ul class="current">
-          <li>衣</li>
-          <li>食</li>
-          <li>住</li>
-          <li>行</li>
-        </ul>
-        <div class =new>
-          <button>新增标签</button>
-        </div>
-      </div>
-      <div>
-        <label>
-          <span class="name">备注</span>
-          <input type="text">
-        </label>
-      </div>
-      <div>
-        <ul class="types">
-          <li class="selected">支出</li>
-          <li class="selected">收入</li>
-        </ul>
-      </div>
+    <Layout  class-prefix="layout">
       <div class="numberPad">
         <div class="output">100</div>
         <div class="buttons">
@@ -41,12 +18,38 @@
           <button>8</button>
           <button>9</button>
           <button>*</button>
+          <button class="ok">OK</button>
           <button>0</button>
           <button>.</button>
           <button>%</button>
           <button>/</button>
-          <button>ok</button>
+
         </div>
+      </div>
+      <div>
+        <ul class="types">
+          <li class="selected">支出</li>
+          <li >收入</li>
+        </ul>
+      </div>
+      <div>
+        <label class="notes">
+          <span class="name" >备注</span>
+          <input type="text" placeholder="在这里输入备注">
+        </label>
+      </div>
+      <div class="tags">
+        <div class =new>
+          <button>新增标签</button>
+        </div>
+        <ul class="current">
+          <li>衣</li>
+          <li>食</li>
+          <li>住</li>
+          <li>行</li>
+
+        </ul>
+
       </div>
     </Layout>
   </div>
@@ -59,6 +62,139 @@ name: "Money",
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang ="scss">
+.layout-wrapper{
 
+}
+.layout-content{
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column-reverse;
+}
+</style>
+
+<style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+.numberPad{
+  >.output{
+    @extend %clearfix;
+    @extend %innerShadow;
+    font-size: 36px;
+    text-align: right;
+    padding: 9px 16px;
+    font-family: Consolas,monospace;
+  }
+  .buttons{
+    @extend %clearfix;
+    >button{
+      width: 20%;
+      background: transparent;
+      border: none;
+      height: 64px;
+      float: left;
+      &.ok{
+        height: 64*2px;
+        float: right;
+      }
+      $bg:#f2f2f2;
+      &:nth-child(1){
+        background: $bg;
+      }
+      &:nth-child(2),&:nth-child(6){
+        background: darken($bg,4%);
+      }
+      &:nth-child(3),&:nth-child(7),&:nth-child(11){
+        background: darken($bg,4%*2);
+      }
+      &:nth-child(4),&:nth-child(8),&:nth-child(12),&:nth-child(16){
+        background: darken($bg,4%*3);
+      }
+      &:nth-child(5),&:nth-child(9),&:nth-child(13),&:nth-child(17){
+        background: darken($bg,4%*4);
+      }
+      &:nth-child(10),&:nth-child(14),&:nth-child(18){
+        background: darken($bg,4%*5);
+      }
+      &:nth-child(19){
+        background: darken($bg,4%*6);
+      }
+      &:nth-child(15){
+        background: darken($bg,4%*7);
+      }
+    }
+
+  }
+}
+.types{
+  display: flex;
+  text-align: center;
+  font-size: 24px;
+  background:#C4C4C4;
+  >li{
+    width: 50%;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    &.selected::after{
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: #333333;
+    }
+  }
+}
+.notes{
+  font-size: 14px;
+  padding-left:16px;
+  background:  #f5f5f5;
+  display: flex;
+  align-items: center;
+  >.name{
+    padding-right:16px ;
+  }
+  >input{
+    height: 64px;
+    border: none;
+    background: transparent;
+    flex-grow: 1;
+    padding-right: 16px;
+  }
+}
+.tags{
+  font-size: 14px;
+  padding: 16px;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column-reverse;
+  >.current{
+    display: flex;
+    flex-wrap: wrap;
+    >li{
+      background: #d9d9d9;
+      $h:24px;
+      height: $h;
+      line-height: $h;
+      padding: 0 16px;
+      margin-right:$h;
+      border-radius: $h/2;
+      margin-top: 4px;
+
+    }
+  }
+  >.new{
+    padding-top:16px ;
+    >button{
+      background: transparent;
+      border:none;
+      color: #999;
+      border-bottom: 1px solid;
+      padding: 0 4px;
+    }
+  }
+}
 </style>
