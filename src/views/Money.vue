@@ -1,8 +1,8 @@
 <template>
   <div>
     <Layout  class-prefix="layout">
-      <NumberPads/>
-      <Types />
+      <NumberPads />
+      <Types xxx = "hi"/>
       <Notes/>
       <Tags />
     </Layout>
@@ -32,9 +32,5 @@ name: "Money",
 </style>
 
 <style lang="scss" scoped>
-
-
-
-
 
 </style>
