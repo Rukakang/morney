@@ -7,8 +7,38 @@
   </div>
 </template>
 
-<script lang="js">
-export default {
+<script lang="ts">
+import Vue from 'vue';
+import {Component, Prop} from "vue-property-decorator";
+
+@Component
+export default class Types extends Vue {
+  type = '-';
+  @Prop(Number)xxx: number|undefined;
+  //Prop告诉Vue: xxx不是data是prop;
+  //Number告诉Vue xxx运行时是个Nmuber;
+  //number|undefined 告诉TS xxx编译时类型；
+  //xxx 属性名
+
+  selectType(type: string){
+    if(type !== '+' && type !== '-'){
+      throw new Error('type is unknown')
+    }
+    this.type = type;
+  }
+  mounted(){
+    if(this.xxx === undefined){
+      console.log('undefined')
+    }else {
+      console.log(this.xxx.toString())
+    }
+
+  }
+}
+
+
+//lang="js"时的写法
+/*export default {
   name: "Types",
   props:['xxx'],
   data(){
@@ -25,7 +55,7 @@ export default {
       this.type =type;
     }
   }
-}
+}*/
 </script>
 
 <style lang ="scss" scoped>
