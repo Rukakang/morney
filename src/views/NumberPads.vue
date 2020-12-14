@@ -17,7 +17,7 @@
       <button @click="inputContent">.</button>
       <button @click="inputContent">0</button>
       <button @click="clear">清空</button>
-      <button >Ok</button>
+      <button @click="ok">Ok</button>
 
     </div>
   </div>
@@ -25,13 +25,16 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 
 @Component
 export default class NumberPads extends Vue{
-  output = '0';
+  @Prop()readonly value!: number;
+
+  output = this.value.toString();
   inputContent(event: MouseEvent){
-    const input = event.target.textContent;
+    const button = (event.target as HTMLButtonElement);
+    const input = button.textContent!;
     if ((this.output.length === 16)||(this.output.indexOf('.')>0 && input ==='.')
     ||(this.output ==='.')){
       return;
@@ -54,6 +57,9 @@ export default class NumberPads extends Vue{
   }
   clear(){
     this.output ='0'
+  }
+  ok(){
+    this.$emit('update:value',this.output)
   }
 
 
