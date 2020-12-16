@@ -17,7 +17,9 @@ import Types from "@/views/Types.vue";
 import Notes from "@/views/Notes.vue";
 import Tags from "@/views/Tags.vue";
 import {Component, Watch} from "vue-property-decorator";
+const model = require('@/model.js').default;
 
+const recodeList: Recode[] = model.fetch();
 type Recode ={
   tags: string[];
   notes: string;
@@ -30,7 +32,7 @@ type Recode ={
 })
 export default class Money extends  Vue{
   tags = ['衣','食','住','行'];
-  recodeList: Recode[]=JSON.parse(localStorage.getItem('recodeList')||'[]');
+  recodeList: Recode[]= recodeList;
   recode: Recode = {
     tags:[],notes:'',type:'-',amount:0
   }
@@ -51,7 +53,7 @@ export default class Money extends  Vue{
   }
   @Watch('recodeList')
   onRecodeListChanged(){
-    localStorage.setItem('recodeList',JSON.stringify(this.recodeList))
+    model.save(this.recodeList)
   }
 
 }
