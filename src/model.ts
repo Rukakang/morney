@@ -3,7 +3,7 @@ const model = {
     fetch(){
         return JSON.parse(localStorage.getItem(localStorageKeyNanme)||'[]');
     },
-    save(data){
+    save(data: RecodeItem[]){
         localStorage.setItem(localStorageKeyNanme,JSON.stringify(data))
     }
 
