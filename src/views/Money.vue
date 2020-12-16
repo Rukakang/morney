@@ -17,7 +17,7 @@ import Types from "@/views/Types.vue";
 import Notes from "@/views/Notes.vue";
 import Tags from "@/views/Tags.vue";
 import {Component, Watch} from "vue-property-decorator";
-const model = require('../model.js').default;
+import model from "@/model";
 
 const recodeList: RecodeItem[] = model.fetch();
 
