@@ -3,7 +3,9 @@
     <Layout  class-prefix="layout">
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
       <Types :value.sync = "recode.type" />  <!-- 如果项这个type一样给了初始值，在子组件中又传回了值就可以改成用sync-->
-      <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
+      <div class="notes">
+        <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
+      </div>
       <Tags :data-source.sync="tags" @update:value="onUpdateTags"  />
     </Layout>
   </div>
@@ -63,6 +65,9 @@ export default class Money extends  Vue{
 .layout-content{
   display: flex;
   flex-direction: column-reverse;
+}
+.notes{
+  padding: 12px 0;
 }
 </style>
 
