@@ -3,7 +3,7 @@
     <Layout  class-prefix="layout">
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
       <Types :value.sync = "recode.type" />  <!-- 如果项这个type一样给了初始值，在子组件中又传回了值就可以改成用sync-->
-      <Notes @update:value = "onUpdateNotes"/>
+      <Notes field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
       <Tags :data-source.sync="tags" @update:value="onUpdateTags"  />
     </Layout>
   </div>
