@@ -3,7 +3,7 @@
     <Layout  class-prefix="layout">
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
       <Types :value.sync = "recode.type" />  <!-- 如果项这个type一样给了初始值，在子组件中又传回了值就可以改成用sync-->
-      <Notes field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
+      <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
       <Tags :data-source.sync="tags" @update:value="onUpdateTags"  />
     </Layout>
   </div>
@@ -14,7 +14,7 @@
 import Vue from 'vue';
 import NumberPads from "@/views/NumberPads.vue";
 import Types from "@/views/Types.vue";
-import Notes from "@/views/Notes.vue";
+import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
 import {Component, Watch} from "vue-property-decorator";
 import model from "@/models/model";
@@ -25,7 +25,7 @@ const tagList = tagListModel.fetch();
 
 
 @Component({
-  components: {Tags, Notes, Types, NumberPads}
+  components: {Tags, FormItem, Types, NumberPads}
 })
 export default class Money extends  Vue{
   tags = tagList;
