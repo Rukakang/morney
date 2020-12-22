@@ -20,17 +20,16 @@ import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
 import {Component, Watch} from "vue-property-decorator";
 import model from "@/models/model";
-import tagListModel from "@/models/tagListModel";
 
 const recodeList: RecodeItem[] = model.fetch();
-const tagList = tagListModel.fetch();
+
 
 
 @Component({
   components: {Tags, FormItem, Types, NumberPads}
 })
 export default class Money extends  Vue{
-  tags = tagList;
+  tags = window.tagList;
   recodeList: RecodeItem[]= recodeList;
   recode: RecodeItem = {
     tags:[],notes:'',type:'-',amount:0
