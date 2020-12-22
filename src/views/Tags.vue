@@ -35,19 +35,7 @@ export default class Tags extends Vue{
     if (name === ''){
       window.alert('标签名不能为空');
     }else {
-      if (this.dataSource){
-       const hisData = tagListModel.fetch();
-        if(name){
-          const message = tagListModel.create(name);
-          if(message === 'duplicated'){
-            window.alert('标签名重复了');
-          }else if(message === 'success'){
-            this.dataSource = tagListModel.fetch();
-            this.$emit('update:dataSource',this.dataSource);
-            window.alert('添加成功')
-          }
-        }
-      }
+      window.alert('添加成功');
     }
   }
 }

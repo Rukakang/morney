@@ -1,9 +1,9 @@
 <template>
   <div>
     <label class="formItem">
-      <span class="name" >{{ this.fieldName }}</span>
+      <span class="name" >{{ fieldName }}</span>
       <!-- v-model=value等价于 :value=value @input="value=$event.target.value,即把数据绑定并赋值，使用prop时会有问题" -->
-      <input type="text" :value="value" @input ="onValueChanged($event.target.value)" :placeholder="this.placeholder">
+      <input type="text" :value="value" @input ="onValueChanged($event.target.value)" :placeholder="placeholder">
     </label>
   </div>
 </template>
@@ -15,7 +15,7 @@ import {Component, Prop, Watch} from "vue-property-decorator";
 @Component
 export default class FormItem extends Vue{
   @Prop({default:''})readonly value!: string;
-  @Prop({require: true})fieldName!: string;
+  @Prop()fieldName!: string;
   @Prop()placeholder?: string;
   @Watch('value')
   onValueChanged(value: string){
