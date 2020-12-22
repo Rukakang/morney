@@ -3,7 +3,7 @@
     <label class="formItem">
       <span class="name" >{{ this.fieldName }}</span>
       <!-- v-model=value等价于 :value=value @input="value=$event.target.value,即把数据绑定并赋值，使用prop时会有问题" -->
-      <input type="text" :value="value" @input ="onValueChanged" v-model = "value" :placeholder="this.placeholder">
+      <input type="text" :value="value" @input ="onValueChanged($event.target.value)" :placeholder="this.placeholder">
     </label>
   </div>
 </template>
