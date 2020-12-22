@@ -43,16 +43,12 @@ export default class Money extends  Vue{
     this.recode.notes = value;
   }
   saveRecode(){
-    //深拷贝以后再push 到数组中，否则，
-    // recode每改变一次，loacalstorage中存着的recode都会改变，因为recode是地址，该地址里面变量值变了，所有引用这个对象的值都变了
-    const recode2: RecodeItem = model.clone(this.recode);
-    recode2.createaAt = new Date();
-    this.recodeList.push(recode2);
-    //localStorage.setItem('recodeList',JSON.stringify(this.recodeList)) //不太合适，每次修改recode都会改变，应该watch
+    model.create(this.recode);
   }
+  //localStorage.setItem('recodeList',JSON.stringify(this.recodeList)) //不太合适，每次修改recode都会改变，应该watch
   @Watch('recodeList')
   onRecodeListChanged(){
-    model.save(this.recodeList)
+    model.save();
   }
 
 }
