@@ -19,14 +19,15 @@ import Types from "@/views/Types.vue";
 import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
 import {Component} from "vue-property-decorator";
+import store from "@/store/index2";
 
 
 @Component({
   components: {Tags, FormItem, Types, NumberPads}
 })
 export default class Money extends  Vue{
-  tags = window.tagList;
-  recodeList: RecodeItem[]= window.recodeList;
+  tags = store.tagList;
+  recodeList: RecodeItem[]= store.recodeList;
   recode: RecodeItem = {
     tags:[],notes:'',type:'-',amount:0
   }
@@ -38,7 +39,7 @@ export default class Money extends  Vue{
     this.recode.notes = value;
   }
   saveRecode(){
-    window.createRecode(this.recode);
+    store.createRecode(this.recode);
   }
 }
 </script>
