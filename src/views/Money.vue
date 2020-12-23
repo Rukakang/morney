@@ -19,9 +19,9 @@ import Types from "@/views/Types.vue";
 import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
 import {Component, Watch} from "vue-property-decorator";
-import model from "@/models/model";
+import recodeListModel from "@/models/recodeListModel";
 
-const recodeList: RecodeItem[] = model.fetch();
+const recodeList: RecodeItem[] = recodeListModel.fetch();
 
 
 
@@ -42,12 +42,12 @@ export default class Money extends  Vue{
     this.recode.notes = value;
   }
   saveRecode(){
-    model.create(this.recode);
+    recodeListModel.create(this.recode);
   }
   //localStorage.setItem('recodeList',JSON.stringify(this.recodeList)) //不太合适，每次修改recode都会改变，应该watch
   @Watch('recodeList')
   onRecodeListChanged(){
-    model.save();
+    recodeListModel.save();
   }
 
 }

@@ -1,7 +1,7 @@
 import clone from "@/lib/clone";
 
 const localStorageKeyName = 'recodeList';
-const model = {
+const recodeListModel = {
     data:[] as RecodeItem[],//断言类型
     create(recode: RecodeItem) {
         //深拷贝以后再push 到数组中，否则，
@@ -19,4 +19,4 @@ const model = {
     }
 
 }
-export default model;
+export default recodeListModel;
