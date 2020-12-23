@@ -17,6 +17,9 @@ type TagListModel = {
 };
 
 interface Window{
+    findTag: (id: string) => Tag;
     tagList: Tag[];
     createTag: (name: string) => void;
+    removeTag: (id: string) => boolean;
+    updateTag: TagListModel['update'];//意思是和TagListModel里的update返回值一致
 }
