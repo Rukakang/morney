@@ -9,6 +9,7 @@ const recodeListModel = {
         const recode2: RecodeItem = clone(recode);
         recode2.createaAt = new Date();
         this.data.push(recode2);
+        this.save();
     },
     fetch(){
         this.data = JSON.parse(localStorage.getItem(localStorageKeyName)||'[]') as RecodeItem[];

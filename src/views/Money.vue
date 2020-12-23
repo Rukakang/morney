@@ -18,11 +18,7 @@ import NumberPads from "@/views/NumberPads.vue";
 import Types from "@/views/Types.vue";
 import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
-import {Component, Watch} from "vue-property-decorator";
-import recodeListModel from "@/models/recodeListModel";
-
-const recodeList: RecodeItem[] = recodeListModel.fetch();
-
+import {Component} from "vue-property-decorator";
 
 
 @Component({
@@ -30,7 +26,7 @@ const recodeList: RecodeItem[] = recodeListModel.fetch();
 })
 export default class Money extends  Vue{
   tags = window.tagList;
-  recodeList: RecodeItem[]= recodeList;
+  recodeList: RecodeItem[]= window.recodeList;
   recode: RecodeItem = {
     tags:[],notes:'',type:'-',amount:0
   }
@@ -42,14 +38,8 @@ export default class Money extends  Vue{
     this.recode.notes = value;
   }
   saveRecode(){
-    recodeListModel.create(this.recode);
+    window.createRecode(this.recode);
   }
-  //localStorage.setItem('recodeList',JSON.stringify(this.recodeList)) //不太合适，每次修改recode都会改变，应该watch
-  @Watch('recodeList')
-  onRecodeListChanged(){
-    recodeListModel.save();
-  }
-
 }
 </script>
 
