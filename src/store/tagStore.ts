@@ -1,23 +1,59 @@
-import tagListModel from "@/models/tagListModel";
+import createId from "@/lib/createId";
+const localStorageKeyName = 'tagList';
 
-export default {
+const tagStore = {
     //tag store
-    tagList : tagListModel.fetch(),
-    findTag(id: string){
-        return this.tagList.filter(t=>t.id===id)[0];
+    tagList :[] as Tag[],
+    fetchTags(){
+        this.tagList = JSON.parse(localStorage.getItem(localStorageKeyName)||'[]');
+        return this.tagList;
     },
-    createTag :(name: string)=>{
-        const message = tagListModel.create(name);
-        if (name === ''){
+    findTag(id: string){
+        return this.tagList.filter(t=> t.id ===id)[0];
+    },
+    createTag(name: string){
+        const names = this.tagList.map(item=>item.name);
+        if(names.indexOf(name)>=0){
             window.alert('标签名不能为空');
-        }else {
-            window.alert('添加成功');
+            return 'duplicated';
+        }
+        const id = createId().toString();
+        this.tagList.push({id: id, name: name});
+        this.saveTags();
+        window.alert('添加成功');
+        return 'success';
+    },
+    removeTag(id: string){
+        let index = -1;
+        for(let i =0; i< this.tagList.length; i++){
+            if (this.tagList[i].id === id){
+                index = i;
+                break;
+            }
+        }
+        this.tagList.splice(index,1);
+        this.saveTags();
+        return true;
+    },
+    updateTag(id: string,name: string){
+        const idList = this.tagList.map(item=>item.id);
+        if(idList.indexOf(id)>=0){
+            const names = this.tagList.map(item=>item.name);
+            if (names.indexOf(name)>=0){
+                return 'duplicated';
+            }else{
+                const tag =this.tagList.filter(item=>item.id)[0];
+                tag.name = name;
+                this.saveTags();
+                return 'success';
+            }
+        }else{
+            return 'not found';
         }
     },
-    removeTag:(id: string)=>{
-        return tagListModel.remove(id);
-    },
-    updateTag: (id: string,name: string)=>{
-        return tagListModel.update(id,name);
-    },
+    saveTags(){
+        localStorage.setItem(localStorageKeyName,JSON.stringify(this.tagList))
+    }
 }
+tagStore.fetchTags();
+export default tagStore;
