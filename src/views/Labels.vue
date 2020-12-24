@@ -22,14 +22,21 @@ import Button from "@/components/Button.vue";
 import oldStore from "@/store/index2";
 
 @Component({
-  components: {Button}
+  components: {Button},
+  computed:{
+    tagList(){
+      return this.$store.state.tagList;
+    }
+  }
 })
   export default class Labels extends Vue{
-    tags = oldStore.tagList;
+    created(){
+      this.$store.commit('fetchTags');
+    }
     createTag(){
       const name  = window.prompt("请输入标签名");
       if(name){
-        oldStore.createTag(name);
+        this.$store.commit('createTag',name)
       }
 
     }
