@@ -23,11 +23,17 @@ import store from "@/store/index2";
 
 
 @Component({
-  components: {Tags, FormItem, Types, NumberPads}
+  components: {Tags, FormItem, Types, NumberPads},
+  //可以在store.recodeList发生改变时,让recodeList同步改变,理论上对象存的是地址,赋值也没问题,
+  // 但是如果是变量,存的是值,采用赋值写法,当store.recodeList发生改变时,变量值不会同步,所以统一改写成放到computer里
+  computed:{
+    recodeList(){
+      return store.recodeList;
+    }
+  }
 })
 export default class Money extends  Vue{
   tags = store.tagList;
-  recodeList: RecodeItem[]= store.recodeList;
   recode: RecodeItem = {
     tags:[],notes:'',type:'-',amount:0
   }
