@@ -19,7 +19,6 @@ import Types from "@/views/Types.vue";
 import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
 import {Component} from "vue-property-decorator";
-import store from "@/store/index2";
 
 
 @Component({
@@ -28,16 +27,17 @@ import store from "@/store/index2";
   // 但是如果是变量,存的是值,采用赋值写法,当store.recodeList发生改变时,变量值不会同步,所以统一改写成放到computer里
   computed:{
     recodeList(){
-      return store.recodeList;
+      return this.$store.state.recodeList;
     }
   }
 })
 export default class Money extends  Vue{
-  tags = store.tagList;
   recode: RecodeItem = {
     tags:[],notes:'',type:'-',amount:0
   }
-
+  created(){
+    this.$store.commit('fetchRecodes')
+  }
   onUpdateTags(value: string[]){
     this.recode.tags=value;
   }
@@ -45,7 +45,8 @@ export default class Money extends  Vue{
     this.recode.notes = value;
   }
   saveRecode(){
-    store.createRecode(this.recode);
+    this.$store.commit('createRecode',this.recode);
+
   }
 }
 </script>
