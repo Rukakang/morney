@@ -6,7 +6,7 @@
       <span class="rightIcon"></span>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag.name" @update:value = "update" field-name="标签名" placeholder="请输入标签名"></FormItem>
+      <FormItem :value="tag.name"  @update:value = "update" field-name="标签名" placeholder="请输入标签名"></FormItem>
     </div>
     <div class="button-wrapper">
       <Button @click="remove">删除标签</Button>
@@ -22,33 +22,41 @@ import FormItem from "@/views/FormItem.vue";
 import Button from "@/components/Button.vue";
 import oldStore from "@/store/index2";
 @Component({
-  components: {Button, FormItem}
+  components: {Button, FormItem},
+  /*computed:{
+    tag(){
+      return this.$store.state.currentTag;
+    }
+  }*/ //computed计算的tag属性只能用在template里,没法用在下面ts里的this.tag.在ts里改用get tag
 })
 export default class EditLabel extends Vue{
-  tag?: Tag= undefined;
+  get tag(){
+    return this.$store.state.currentTag;
+  }
   created(){
-    this.tag = oldStore.findTag(this.$route.params.id);
+    const id = this.$route.params.id;
+    this.$store.commit('fetchTags');
+    this.$store.commit('setCurrentTag',id);
     if(!this.tag){
       this.$router.replace('/404')
     }
   }
   update(name:  string){
-    if (this.tag){
-      oldStore.updateTag(this.tag.id,name);
+    if (name && name.trim()!=""){
+      if (this.tag){
+        this.$store.commit('updateTag', {id: this.tag.id, name:name});
+      }
     }
   }
   remove(){
     if (this.tag){
-      if(oldStore.removeTag(this.tag.id)){
-        this.$router.back();
-      }else {
-        window.alert('删除失败');
-      }
+      this.$store.commit('removeTag',this.tag.id);
     }
   }
   goBack(){
     this.$router.back();
   }
+
 
 }
 </script>
