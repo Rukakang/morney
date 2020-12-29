@@ -2,6 +2,7 @@
   <ul class="tabs" :class="{[classPrefix+'-tab']:classPrefix}">
     <li v-for="item in dataSource" :key="item.text"
         class="tabs-item"
+        :style="{height:height}"
         :class="liClass(item)"
         @click="select(item)"
     >{{item.text}}</li>
@@ -18,6 +19,7 @@ export default class Tabs extends Vue{
   @Prop({required:true,type:Array})dataSource!: DataSourceItem[];
   @Prop(String)readonly value!: string;
   @Prop(String) classPrefix?: string;
+  @Prop({type:String, default:'64px'})height!: string;
 
   liClass(item: DataSourceItem){
     return {[this.classPrefix + '-tabs-item']: this.classPrefix, selected: item.value === this.value} //加中括号才能写变量
@@ -36,7 +38,7 @@ export default class Tabs extends Vue{
   background:#C4C4C4;
   &-item{
     width: 50%;
-    height: 64px;
+   /* height: 64px;*/
     display: flex;
     justify-content: center;
     align-items: center;
