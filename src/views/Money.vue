@@ -2,7 +2,7 @@
   <div>
     <Layout  class-prefix="layout">
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
-      <Types :value.sync = "recode.type" />  <!-- 如果项这个type一样给了初始值，在子组件中又传回了值就可以改成用sync-->
+      <Tabs :data-source="recodeTypeList" :value.sync ="recode.type"></Tabs>
       <div class="notes">
         <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
       </div>
@@ -15,14 +15,15 @@
 <script lang="ts">
 import Vue from 'vue';
 import NumberPads from "@/views/NumberPads.vue";
-import Types from "@/views/Types.vue";
 import FormItem from "@/views/FormItem.vue";
 import Tags from "@/views/Tags.vue";
 import {Component} from "vue-property-decorator";
+import Tabs from "@/components/Tabs.vue";
+import recodeTypeList from "@/constants/recodeTypeList";
 
 
 @Component({
-  components: {Tags, FormItem, Types, NumberPads},
+  components: {Tabs, Tags, FormItem,  NumberPads},
   //可以在store.recodeList发生改变时,让recodeList同步改变,理论上对象存的是地址,赋值也没问题,
   // 但是如果是变量,存的是值,采用赋值写法,当store.recodeList发生改变时,变量值不会同步,所以统一改写成放到computer里
   /*computed:{
@@ -32,6 +33,7 @@ import {Component} from "vue-property-decorator";
   }*/
 })
 export default class Money extends  Vue{
+  recodeTypeList = recodeTypeList;
   recode: RecodeItem = {
     tags:[],notes:'',type:'-',amount:0
   }
