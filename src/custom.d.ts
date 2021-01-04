@@ -1,9 +1,15 @@
+type RootState ={
+    recodeList: RecodeItem[];
+    tagList: Tag[];
+    currentTag?: Tag; //问号表示可以没有
+};
+
 type RecodeItem ={
     tags: string[];
     notes: string;
     type: string;
     amount: number;
-    createaAt?: Date;
+    createAt?: string;
 };
 
 type Tag = {id: string;name: string};

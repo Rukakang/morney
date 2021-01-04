@@ -6,11 +6,7 @@ import router from "@/router";
 
 Vue.use(Vuex)
 
-type RootState ={
-  recodeList: RecodeItem[];
-  tagList: Tag[];
-  currentTag?: Tag; //问号表示可以没有
-}
+
 
 const store = new Vuex.Store({
   state: {
@@ -22,13 +18,14 @@ const store = new Vuex.Store({
   //store的mutations所有操作不会有返回值,直接体现在state更新数据上
   mutations: {
     fetchRecodes(state){
+      //JSON.parse是JSON序列化字符串,JSON不支持data类型,可以查阅JSON官方中文文档看所支持的类型
       state.recodeList = JSON.parse(localStorage.getItem('recodeList')||'[]') as RecodeItem[];
     },
     createRecode(state,recode: RecodeItem) {
       //深拷贝以后再push 到数组中，否则，
       // recode每改变一次，loacalstorage中存着的recode都会改变，因为recode是地址，该地址里面变量值变了，所有引用这个对象的值都变了
       const recode2: RecodeItem = clone(recode);
-      recode2.createaAt = new Date();
+      recode2.createAt = new Date().toISOString();
       state.recodeList?.push(recode2); //问号表示可能为undefined,不为undefined才push,可选链新语法
       store.commit('saveRecodes');
     },
