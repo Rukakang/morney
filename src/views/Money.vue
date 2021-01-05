@@ -56,7 +56,7 @@ export default class Money extends  Vue{
 }
 </script>
 
-<style lang ="scss" scoped>
+<style lang ="scss" >
 .layout-wrapper{
 
 }

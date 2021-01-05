@@ -8,7 +8,7 @@
         <ol>
           <li v-for="item in group.items" :key="item.id" class="recode">
             <span>{{tagString(item.tags)}}</span>
-            <span class="notes">{{item.notes}}</span>
+            <span class="itemNotes">{{item.notes}}</span>
             <span>￥{{item.amount}}</span>
           </li>
         </ol>
@@ -95,7 +95,7 @@ export default class Statistics extends Vue{
   .recode{
     @extend %item;
     background: white;
-  .notes{
+  .itemNotes{
     margin-right: auto;
     margin-left: 16px;
     color: #999999;
