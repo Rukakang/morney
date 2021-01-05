@@ -2,17 +2,18 @@
   <Layout>
     <Tabs :data-source="recodeTypeList" class-prefix="type" :value.sync="type"></Tabs>
     <Tabs :data-source="intervalList" class-prefix="interval" :value.sync="interval" height="48px"></Tabs>
-
-    <div v-for="(group,index) in result" :key="index">
-      <h3>{{group.title}}</h3>
-      <ol>
-        <li v-for="item in group.items" :key="item.id">
-          {{item.amount}}  {{item.createAt}}
-        </li>
-      </ol>
-    </div>
-    <div>
-    </div>
+    <ol>
+      <li v-for="(group,index) in result" :key="index">
+        <h3 class="title">{{group.title}}</h3>
+        <ol>
+          <li v-for="item in group.items" :key="item.id" class="recode">
+            <span>{{tagString(item.tags)}}</span>
+            <span class="notes">{{item.notes}}</span>
+            <span>￥{{item.amount}}</span>
+          </li>
+        </ol>
+      </li>
+    </ol>
   </Layout>
 </template>
 
@@ -26,6 +27,20 @@ import recodeTypeList from "@/constants/recodeTypeList";
   components: {Tabs}
 })
 export default class Statistics extends Vue{
+  tagString(tag: Tag[]){
+    if (tag.length === 0){
+      return '无';
+    }else{
+      let newItem = '';
+      for (let i = 0; i < tag.length; i++){
+        if (tag[i].name){
+          newItem +=tag[i].name+',';
+        }
+
+      }
+      return newItem.substring(0,newItem.length-1);
+    }
+  }
   get recodeList(){
     return (this.$store.state as RootState).recodeList;
   }
@@ -66,6 +81,25 @@ export default class Statistics extends Vue{
   }
   ::v-deep .interval-tabs-item{
    /* height: 48px;*/
+  }
+  %item{
+    padding: 8px 16px;
+    line-height: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+  }
+  .title{
+    @extend %item;
+  }
+  .recode{
+    @extend %item;
+    background: white;
+  .notes{
+    margin-right: auto;
+    margin-left: 16px;
+    color: #999999;
+  }
   }
 
 

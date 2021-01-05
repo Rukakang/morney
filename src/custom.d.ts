@@ -5,7 +5,7 @@ type RootState ={
 };
 
 type RecodeItem ={
-    tags: string[];
+    tags: Tag[];
     notes: string;
     type: string;
     amount: number;
