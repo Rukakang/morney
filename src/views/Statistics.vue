@@ -4,7 +4,7 @@
     <Tabs :data-source="intervalList" class-prefix="interval" :value.sync="interval" height="48px"></Tabs>
     <ol>
       <li v-for="(group,index) in result" :key="index">
-        <h3 class="title">{{group.title}}</h3>
+        <h3 class="title">{{beautify(group.title)}}</h3>
         <ol>
           <li v-for="item in group.items" :key="item.id" class="recode">
             <span>{{tagString(item.tags)}}</span>
@@ -23,6 +23,9 @@ import {Component} from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import intervalList from "@/constants/intervalList";
 import recodeTypeList from "@/constants/recodeTypeList";
+import dayjs from "dayjs";
+
+const oneDay = 86400*1000; //一天等于86400秒，js的单位是毫秒，所以再乘1000
 @Component({
   components: {Tabs}
 })
@@ -41,6 +44,24 @@ export default class Statistics extends Vue{
       return newItem.substring(0,newItem.length-1);
     }
   }
+  beautify(time: string){
+    //js自带的date不好用，一般使用dayjs,yarn add dayjs,然后引用即可，dayjs是个api,可以进行链式操作;
+    //dayjs(time)可以把toISOString以后的时间转换回中国时间，等价于new Date(Date.parse(time));
+    const day = dayjs(time);
+    const now =dayjs();//也可以写成const now =  new  Date();
+    if(day.isSame(now,'day')){
+        return '今天';
+    }else if(day.isSame(now.subtract(1,'day'),'day')){ //subtract是dayjs的api
+    //或者这样写 else if(dayjs(time).isSame(now.valueOf()-oneDay,'day')){
+        return '昨天';
+    }else if(day.isSame(now.subtract(2,'day'),'day')) {
+        return '前天';
+    }else if(day.isSame(now,'year')){
+      return day.format('M月D日');
+    }else{
+      return day.format('YYYY年M月D日');
+    }
+  }
   get recodeList(){
     return (this.$store.state as RootState).recodeList;
   }
@@ -54,7 +75,6 @@ export default class Statistics extends Vue{
         hashTable[date] = hashTable[date]||{title:date,items:[]};
         hashTable[date].items.push(recodeList[i]);
     }
-    console.log(hashTable);
     return hashTable;
   }
   beforeCreate(){
