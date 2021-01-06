@@ -3,7 +3,7 @@
     <Tabs :data-source="recodeTypeList" class-prefix="type" :value.sync="type"></Tabs>
     <Tabs :data-source="intervalList" class-prefix="interval" :value.sync="interval" height="48px"></Tabs>
     <ol>
-      <li v-for="(group,index) in result" :key="index">
+      <li v-for="(group,index) in groupedList" :key="index">
         <h3 class="title">{{beautify(group.title)}}</h3>
         <ol>
           <li v-for="item in group.items" :key="item.id" class="recode">
@@ -24,6 +24,7 @@ import Tabs from "@/components/Tabs.vue";
 import intervalList from "@/constants/intervalList";
 import recodeTypeList from "@/constants/recodeTypeList";
 import dayjs from "dayjs";
+import clone from "@/lib/clone";
 
 const oneDay = 86400*1000; //一天等于86400秒，js的单位是毫秒，所以再乘1000
 @Component({
@@ -65,17 +66,24 @@ export default class Statistics extends Vue{
   get recodeList(){
     return (this.$store.state as RootState).recodeList;
   }
-  get result(){
+  get groupedList(){
 
     const {recodeList} = this;
-    type HashTableValue = {title: string;items: RecodeItem[]};
-    const hashTable: {[key: string]: HashTableValue }={};
-    for(let i = 0 ; i < recodeList.length; i++){
-        const[date,time] =recodeList[i].createAt!.split('T');
-        hashTable[date] = hashTable[date]||{title:date,items:[]};
-        hashTable[date].items.push(recodeList[i]);
+    if (recodeList.length === 0){return []}
+    //对recodeList排序返回新值,newList就是已经排好序的
+    const newList = clone(recodeList).sort((a,b)=>dayjs(b.createAt).valueOf()-dayjs(a.createAt).valueOf());
+    const result = [{title:dayjs(newList[0].createAt).format('YYYY-MM-DD'),items:[newList[0]]}];
+    for (let i = 1; i < newList.length; i++){
+      const current = newList[i];
+      const last = result[result.length-1];
+      if (dayjs(current.createAt).isSame(last.title,'day')){
+        last.items.push(current);
+      }else {
+        result.push({title:dayjs(current.createAt).format('YYYY-MM-DD'),items:[current]});
+      }
+
     }
-    return hashTable;
+    return result;
   }
   beforeCreate(){
     this.$store.commit('fetchRecodes');
