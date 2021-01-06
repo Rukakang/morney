@@ -1,10 +1,9 @@
 <template>
   <Layout>
     <Tabs :data-source="recodeTypeList" class-prefix="type" :value.sync="type"></Tabs>
-    <Tabs :data-source="intervalList" class-prefix="interval" :value.sync="interval" height="48px"></Tabs>
     <ol>
       <li v-for="(group,index) in groupedList" :key="index">
-        <h3 class="title">{{beautify(group.title)}}</h3>
+        <h3 class="title">{{beautify(group.title)}}<span>￥{{group.total}}</span></h3>
         <ol>
           <li v-for="item in group.items" :key="item.id" class="recode">
             <span>{{tagString(item.tags)}}</span>
@@ -21,12 +20,11 @@
 import Vue from 'vue';
 import {Component} from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
-import intervalList from "@/constants/intervalList";
 import recodeTypeList from "@/constants/recodeTypeList";
 import dayjs from "dayjs";
 import clone from "@/lib/clone";
 
-const oneDay = 86400*1000; //一天等于86400秒，js的单位是毫秒，所以再乘1000
+//const oneDay = 86400*1000; //一天等于86400秒，js的单位是毫秒，所以再乘1000
 @Component({
   components: {Tabs}
 })
@@ -67,30 +65,34 @@ export default class Statistics extends Vue{
     return (this.$store.state as RootState).recodeList;
   }
   get groupedList(){
-
     const {recodeList} = this;
-    if (recodeList.length === 0){return []}
-    //对recodeList排序返回新值,newList就是已经排好序的
-    const newList = clone(recodeList).sort((a,b)=>dayjs(b.createAt).valueOf()-dayjs(a.createAt).valueOf());
-    const result = [{title:dayjs(newList[0].createAt).format('YYYY-MM-DD'),items:[newList[0]]}];
-    for (let i = 1; i < newList.length; i++){
-      const current = newList[i];
-      const last = result[result.length-1];
-      if (dayjs(current.createAt).isSame(last.title,'day')){
-        last.items.push(current);
-      }else {
-        result.push({title:dayjs(current.createAt).format('YYYY-MM-DD'),items:[current]});
-      }
-
-    }
-    return result;
+    let newList = clone(recodeList).filter(r=>r.type===this.type);
+        if(newList.length > 0){
+          newList = newList.sort((a,b)=>dayjs(b.createAt).valueOf()-dayjs(a.createAt).valueOf());
+          type Result = {title: string; total?: number; items: RecodeItem[]}[];
+          const result: Result = [{title:dayjs(newList[0].createAt).format('YYYY-MM-DD'),items:[newList[0]]}];
+          for (let i = 1; i < newList.length; i++){
+            const current = newList[i];
+            const last = result[result.length-1];
+            if (dayjs(current.createAt).isSame(last.title,'day')){
+              last.items.push(current);
+            }else {
+              result.push({title:dayjs(current.createAt).format('YYYY-MM-DD'),items:[current]});
+            }
+          }
+          result.map(group=>{
+            group.total = group.items.reduce((sum,item)=>{return sum + item.amount},0)
+          })
+          return result;
+        }else{
+          return [];
+        }
   }
   beforeCreate(){
     this.$store.commit('fetchRecodes');
   }
   type = '-';
   interval = 'day';
-  intervalList=intervalList;
   recodeTypeList=recodeTypeList;
 }
 </script>
@@ -98,10 +100,9 @@ export default class Statistics extends Vue{
 <style scoped lang="scss">
   //deep语法可以深入到里面,本来加了scoped是不可以的
   ::v-deep .type-tabs-item{
-    background: white;
-    border: 1px solid #ff0000;
+    background: #C4C4C4;
     &.selected{
-      background: #C4C4C4;
+      background: white;
       &::after{
         display: none;
       }
