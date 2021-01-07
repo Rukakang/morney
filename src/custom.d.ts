@@ -1,5 +1,6 @@
 type RootState ={
     recodeList: RecodeItem[];
+    createRecodeError: Error|null;
     tagList: Tag[];
     currentTag?: Tag; //问号表示可以没有
 };

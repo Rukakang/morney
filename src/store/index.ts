@@ -11,6 +11,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     recodeList:[] ,
+    createRecodeError:null,
     tagList :[],
     currentTag: undefined,
   } as RootState,

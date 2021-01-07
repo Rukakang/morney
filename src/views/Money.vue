@@ -43,15 +43,22 @@ export default class Money extends  Vue{
   created(){
     this.$store.commit('fetchRecodes')
   }
-  onUpdateTags(value: string[]){
+  onUpdateTags(value: Tag[]){
     this.recode.tags=value;
   }
   onUpdateNotes(value: string){
     this.recode.notes = value;
   }
   saveRecode(){
+    if (!this.recode.tags || this.recode.tags.length ===0){
+      return window.alert('请至少选择一个标签');
+    }
+
     this.$store.commit('createRecode',this.recode);
 
+    if (this.$store.state.createRecodeError === null){
+      this.recode.notes = '';
+    }
   }
 }
 </script>
