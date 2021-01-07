@@ -3,7 +3,7 @@
     <label class="formItem">
       <span class="name" >{{ fieldName }}</span>
       <!-- v-model=value等价于 :value=value @input="value=$event.target.value,即把数据绑定并赋值，使用prop时会有问题" -->
-      <input type="text" :value="value" @focus="focus($event)" @input ="onValueChanged($event.target.value)" :placeholder="placeholder">
+      <input type="text" :value="value"  @input ="onValueChanged($event.target.value)" :placeholder="placeholder">
     </label>
   </div>
 </template>
@@ -21,9 +21,6 @@ export default class FormItem extends Vue{
   onValueChanged(value: string){
 
     this.$emit('update:value',value)
-  }
-  focus(event) {
-    event.currentTarget.select();
   }
 }
 
