@@ -28,7 +28,7 @@ window.onload = function (){
 if (document.documentElement.clientWidth > 500){
   window.alert('请使用手机打开本页面，以保证使用效果');
   const img = document.createElement('img');
-  img.src = './public/grcode.png';
+  img.src = `${process.env.BASE_URL}grcode.png`;
   img.style.position = 'fixed';
   img.style.left = '50%';
   img.style.top = '50%';
