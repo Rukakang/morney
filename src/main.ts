@@ -25,4 +25,6 @@ window.onload = function (){
   },0);
 };
 
-
+if (document.documentElement.clientWidth > 500) {
+  window.alert('温馨提示：使用手机打开效果更好');
+}
