@@ -3,6 +3,9 @@
     <Layout  class-prefix="layout">
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
       <Tabs :data-source="recodeTypeList" :value.sync ="recode.type"></Tabs>
+      <div class="createAt">
+        <FormItem type="datetime-local" field-name="日期" placeholder="在这里输入日期" :value.sync="recode.createAt"/>
+      </div>
       <div class="notes">
         <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
       </div>
@@ -35,7 +38,7 @@ import recodeTypeList from "@/constants/recodeTypeList";
 export default class Money extends  Vue{
   recodeTypeList = recodeTypeList;
   recode: RecodeItem = {
-    tags:[],notes:'',type:'-',amount:0
+    tags:[],notes:'',type:'-',amount:0,createAt:new Date().toISOString()
   }
   get recodeList(){
     return this.$store.state.recodeList;
