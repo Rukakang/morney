@@ -2,7 +2,7 @@
   <div>
     <label class="formItem">
       <span class="name" >{{ fieldName }}</span>
-      <template v-if="type ==='datetime-local'">
+      <template v-if="type ==='date'">
        <input :type="type||'text'" :value="x(value)"  @input ="onValueChanged($event.target.value)" :placeholder="placeholder">
       </template>
       <template v-else>
@@ -27,7 +27,7 @@ export default class FormItem extends Vue{
   @Prop()type?: string;
 
   x(iosString: string){
-    return dayjs(iosString).format('YYYY-MM-DDTHH:mm')
+    return dayjs(iosString).format('YYYY-MM-DD')
   }
   onValueChanged(value: string){
 
