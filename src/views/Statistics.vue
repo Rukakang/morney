@@ -139,7 +139,11 @@ export default class Statistics extends Vue{
   width: 430%;
   &Wrapper{
     overflow: auto;
+    &::-webkit-scrollbar{
+      display: none;
+    }
   }
+
 }
   //deep语法可以深入到里面,本来加了scoped是不可以的
   ::v-deep .type-tabs-item{
