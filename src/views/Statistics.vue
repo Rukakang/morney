@@ -1,5 +1,8 @@
 <template>
   <Layout>
+    <div class="chartWrapper" ref="chartWrapper">
+      <Chart class="chart" :options="x"></Chart>
+    </div>
     <Tabs :data-source="recodeTypeList" class-prefix="type" :value.sync="type"></Tabs>
     <ol>
       <li v-for="(group,index) in groupedList" :key="index">
@@ -23,12 +26,46 @@ import Tabs from "@/components/Tabs.vue";
 import recodeTypeList from "@/constants/recodeTypeList";
 import dayjs from "dayjs";
 import clone from "@/lib/clone";
+import Chart from "@/components/Chart.vue";
 
 //const oneDay = 86400*1000; //一天等于86400秒，js的单位是毫秒，所以再乘1000
 @Component({
-  components: {Tabs}
+  components: {Chart, Tabs}
 })
 export default class Statistics extends Vue{
+  mounted(){
+    const div = (this.$refs.chartWrapper as HTMLDivElement).scrollLeft=9999;
+  }
+  get x(){
+    return{
+      //grid用于控制折线图四周的空白
+      grid:{
+        left:0,
+        right:0
+      },
+      xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+          'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+          'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+          'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+          'Mon', 'Tue']
+      },
+      yAxis: {
+        type: 'value',
+        show:'false'
+      },
+      series: [{
+        data: [820, 932, 901, 934, 1290, 1330, 1320,
+          820, 932, 901, 934, 1290, 1330, 1320,
+          820, 932, 901, 934, 1290, 1330, 1320,
+          820, 932, 901, 934, 1290, 1330, 1320,
+          820, 932],
+        type: 'line'
+      }],
+      tooltip:{show: true}
+    }
+  }
   tagString(tag: Tag[]){
     if (tag.length === 0){
       return '无';
@@ -98,6 +135,12 @@ export default class Statistics extends Vue{
 </script>
 
 <style scoped lang="scss">
+.chart {
+  width: 430%;
+  &Wrapper{
+    overflow: auto;
+  }
+}
   //deep语法可以深入到里面,本来加了scoped是不可以的
   ::v-deep .type-tabs-item{
     background: #C4C4C4;
@@ -129,6 +172,7 @@ export default class Statistics extends Vue{
     margin-left: 16px;
     color: #999999;
   }
+
   }
 
 

@@ -4,7 +4,7 @@
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
       <Tabs :data-source="recodeTypeList" :value.sync ="recode.type"></Tabs>
       <div class="createAt">
-        <FormItem type="date" field-name="日期" placeholder="在这里输入日期" :value.sync="recode.createAt"/>
+        <FormItem type="date" field-name="日期" placeholder="在这里输入日期" @update:value="onUpdateCreateAt"/>
       </div>
       <div class="notes">
         <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
@@ -51,6 +51,9 @@ export default class Money extends  Vue{
   }
   onUpdateNotes(value: string){
     this.recode.notes = value;
+  }
+  onUpdateCreateAt(value: string){
+    this.recode.createAt = value;
   }
   saveRecode(){
     if (!this.recode.tags || this.recode.tags.length ===0){
