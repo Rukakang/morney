@@ -49,21 +49,26 @@ export default class Statistics extends Vue{
           'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
           'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
           'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-          'Mon', 'Tue']
+          'Mon', 'Tue'],
+        axisTick:{alignWithLabel:true},
+        axisLine:{lineStyle:{color: '#666'}}
       },
       yAxis: {
         type: 'value',
         show:'false'
       },
       series: [{
+        symbol:'circle',
+        symbolSize:12,
+        itemStyle:{color: '#666',borderColor:'#666'},
         data: [820, 932, 901, 934, 1290, 1330, 1320,
-          820, 932, 901, 934, 1290, 1330, 1320,
-          820, 932, 901, 934, 1290, 1330, 1320,
-          820, 932, 901, 934, 1290, 1330, 1320,
-          820, 932],
+        820, 932, 901, 934, 1290, 1330, 1320,
+        820, 932, 901, 934, 1290, 1330, 1320,
+        820, 932, 901, 934, 1290, 1330, 1320,
+        820, 932],
         type: 'line'
       }],
-      tooltip:{show: true}
+      tooltip:{show: true,triggerOn:'click',formatter:'{c}',position:'top'}
     }
   }
   tagString(tag: Tag[]){
