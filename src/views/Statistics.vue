@@ -46,9 +46,8 @@ export default class Statistics extends Vue{
     const today = dayjs(new Date());
     for (let i=30; i>=0; i--){
       const dateString =today.subtract(i,'day').format('YYYY-MM-DD');
-      const found = _.filter(this.recodeList,{'createAt':dateString});
-      const sum = _.sumBy(found,'amount');
-      array.push({key:dateString,value:sum?sum:0});
+      const found = _.find(this.groupedList,{'title':dateString});
+      array.push({key:dateString,value:found?found.total:0});
     }
     return array;
   }
@@ -96,7 +95,6 @@ export default class Statistics extends Vue{
         if (tag[i].name){
           newItem +=tag[i].name+',';
         }
-
       }
       return newItem.substring(0,newItem.length-1);
     }
