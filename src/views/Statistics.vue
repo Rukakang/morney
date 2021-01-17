@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <div class="chartWrapper" ref="chartWrapper">
-      <Chart class="chart" :options="x"></Chart>
+      <Chart class="chart" :options="chartOptions"></Chart>
     </div>
     <Tabs :data-source="recodeTypeList" class-prefix="type" :value.sync="type"></Tabs>
     <ol>
@@ -27,6 +27,7 @@ import recodeTypeList from "@/constants/recodeTypeList";
 import dayjs from "dayjs";
 import clone from "@/lib/clone";
 import Chart from "@/components/Chart.vue";
+import _ from "lodash";
 
 //const oneDay = 86400*1000; //一天等于86400秒，js的单位是毫秒，所以再乘1000
 @Component({
@@ -37,22 +38,40 @@ export default class Statistics extends Vue{
     const div = (this.$refs.chartWrapper as HTMLDivElement);
     div.scrollLeft=div.scrollWidth;
   }
-  get x(){
+  get recodeList(){
+    return (this.$store.state as RootState).recodeList;
+  }
+  get keyValueList(){
+    const array = [];
+    const today = dayjs(new Date());
+    for (let i=30; i>=0; i--){
+      const dateString =today.subtract(i,'day').format('YYYY-MM-DD');
+      const found = _.filter(this.recodeList,{'createAt':dateString});
+      const sum = _.sumBy(found,'amount');
+      array.push({key:dateString,value:sum?sum:0});
+    }
+    return array;
+  }
+  get chartOptions(){
+    const keys = this.keyValueList.map(item=>item.key);
+    const values = this.keyValueList.map(item=>item.value);
     return{
       //grid用于控制折线图四周的空白
+
       grid:{
         left:0,
         right:0
       },
       xAxis: {
         type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-          'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-          'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-          'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-          'Mon', 'Tue'],
+        data: keys,
         axisTick:{alignWithLabel:true},
-        axisLine:{lineStyle:{color: '#666'}}
+        axisLine:{lineStyle:{color: '#666'}},
+        axisLabel:{
+          formatter: function (value: string,index: number){
+           return value.substr(5);
+          }
+        }
       },
       yAxis: {
         type: 'value',
@@ -62,11 +81,7 @@ export default class Statistics extends Vue{
         symbol:'circle',
         symbolSize:12,
         itemStyle:{color: '#666',borderColor:'#666'},
-        data: [820, 932, 901, 934, 1290, 1330, 1320,
-        820, 932, 901, 934, 1290, 1330, 1320,
-        820, 932, 901, 934, 1290, 1330, 1320,
-        820, 932, 901, 934, 1290, 1330, 1320,
-        820, 932],
+        data: values,
         type: 'line'
       }],
       tooltip:{show: true,triggerOn:'click',formatter:'{c}',position:'top'}
@@ -104,9 +119,7 @@ export default class Statistics extends Vue{
       return day.format('YYYY年M月D日');
     }
   }
-  get recodeList(){
-    return (this.$store.state as RootState).recodeList;
-  }
+
   get groupedList(){
     const {recodeList} = this;
     let newList = clone(recodeList).filter(r=>r.type===this.type);

@@ -4,7 +4,7 @@
       <NumberPads :value.sync = "recode.amount" @submit="saveRecode"/>
       <Tabs :data-source="recodeTypeList" :value.sync ="recode.type"></Tabs>
       <div class="createAt">
-        <FormItem type="date" field-name="日期" placeholder="在这里输入日期" @update:value="onUpdateCreateAt"/>
+        <FormItem type="date" field-name="日期" placeholder="在这里输入日期" :value.sync="recode.createAt"/>
       </div>
       <div class="notes">
         <FormItem field-name="备注" placeholder="在这里输入备注" @update:value = "onUpdateNotes"/>
@@ -23,6 +23,7 @@ import Tags from "@/views/Tags.vue";
 import {Component} from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import recodeTypeList from "@/constants/recodeTypeList";
+import dayjs from "dayjs";
 
 
 @Component({
@@ -38,7 +39,7 @@ import recodeTypeList from "@/constants/recodeTypeList";
 export default class Money extends  Vue{
   recodeTypeList = recodeTypeList;
   recode: RecodeItem = {
-    tags:[],notes:'',type:'-',amount:0,createAt:new Date().toISOString()
+    tags:[],notes:'',type:'-',amount:0, createAt: dayjs(new Date()).format('YYYY-MM-DD')
   }
   get recodeList(){
     return this.$store.state.recodeList;
@@ -52,14 +53,11 @@ export default class Money extends  Vue{
   onUpdateNotes(value: string){
     this.recode.notes = value;
   }
-  onUpdateCreateAt(value: string){
-    this.recode.createAt = value;
-  }
   saveRecode(){
     if (!this.recode.tags || this.recode.tags.length ===0){
       return window.alert('请至少选择一个标签');
     }
-
+    console.log(this.recode);
     this.$store.commit('createRecode',this.recode);
 
     if (this.$store.state.createRecodeError === null){
